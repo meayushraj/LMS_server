@@ -3,8 +3,13 @@ const User = require("../models/User")
 const passport = require("passport")
 const router = express.Router()
 const bodyParser = require("body-parser")
+var validator = require("validator")
+const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
+const keys = process.env.JWT_SECRET
 
-router.use(bodyParser.urlencoded({ extended: true }))
+router.use(bodyParser.urlencoded({ extended: false }))
+router.use(bodyParser.json())
 router.get("/", (req, res) => {
   res.send("vaishanv")
 })
@@ -17,34 +22,87 @@ router.get("/login", (req, res) => {
   res.send("login")
 })
 
-router.post(
-  "/login",
-  passport.authenticate("local", {
-    successFlash: "Welcome!",
-    failureFlash: "Invalid username or password."
-  }),
-  (req, res) => {}
-)
+router.post("/login", (req, res) => {
+  const email = req.body.email
+  const password = req.body.password
 
-router.post("/register", (req, res) => {
-  // console.log(req.body)
-  // res.send(req.body)
-  var newUser = new User({ username: req.body.username, email: req.body.email })
-  User.register(newUser, req.body.password, function (err, user) {
-    if (err) {
-      console.log(err)
-      res.send("error")
+  User.findOne({ email }).then((user) => {
+    if (!user) {
+      return res.status(404).json({ email: "user not found" })
     }
-    passport.authenticate("local")(req, res, function () {
-      res.send("good")
+    bcrypt.compare(password, user.password).then((isMatch) => {
+      if (isMatch) {
+        const payload = {
+          id: user.id,
+          username: user.username,
+          email: user.email
+        }
+
+        jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
+          res.json({
+            success: true,
+            token: "Bearer " + token
+          })
+        })
+      } else {
+        return res.status(400).json({ password: "password incorrect" })
+      }
     })
   })
 })
 
-router.get("/logout", function (req, res) {
-  req.logout()
-  // res.clearCookie()
-  res.send("logout")
+router.post("/register", (req, res) => {
+  console.log(req.body)
+  // console.log(req.body)
+  // res.send(req.body)
+  // if (validator.isEmail(req.body.email)) {
+  //   const email = req.body.email
+  // } else {
+  //   res.send("email is not valid")
+  // }
+  // var newUser = new User({ username: req.body.username, email: req.body.email })
+  // User.register(newUser, req.body.password, function (err, user) {
+  //   if (err) {
+  //     console.log(err)
+  //     res.send("error")
+  //   }
+  //   passport.authenticate("local")(req, res, function () {
+  //     res.send("good")
+  //   })
+  // })
+  User.findOne({ email: req.body.email }).then((user) => {
+    if (user) {
+      return res.status(400).json({ email: "Email aldready exists" })
+    } else {
+      const newUser = new User({
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password
+      })
+
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newUser.password, salt, (err, hash) => {
+          if (err) {
+            console.log(err)
+          }
+          newUser.password = hash
+          newUser
+            .save()
+            .then((user) => res.json(user))
+            .catch((err) => console.log(err))
+        })
+      })
+    }
+  })
 })
+
+//current user
+router.get(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json(req.user)
+  }
+)
 
 module.exports = router
