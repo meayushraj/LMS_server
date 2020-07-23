@@ -8,6 +8,9 @@ const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const keys = process.env.JWT_SECRET
 
+//module
+const Course = require("../models/Course")
+
 router.use(bodyParser.urlencoded({ extended: false }))
 router.use(bodyParser.json())
 router.get("/", (req, res) => {
@@ -96,12 +99,23 @@ router.post("/register", (req, res) => {
   })
 })
 
+//get all courese
+router.get("/all-course", (req, res) => {
+  Course.find({}, function (err, allCourse) {
+    if (err) {
+      console.log(err)
+    } else {
+      res.json(allCourse)
+    }
+  })
+})
+
 //current user
 router.get(
   "/current",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    res.json(req.user)
+    res.send(req.user)
   }
 )
 
