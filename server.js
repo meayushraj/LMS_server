@@ -12,6 +12,9 @@ require("dotenv").config()
 
 //route config
 const user = require("./routes/users")
+const image = require("./routes/imageUpload")
+const instructor = require("./routes/instructor")
+
 const { MongoStore } = require("connect-mongo")
 
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -59,6 +62,8 @@ app.get("/", (req, res) => {
 
 //routes
 app.use("/user", user)
+app.use("/image", image)
+app.use("/instructor", instructor)
 
 const port = process.env.PORT || 5000
 
