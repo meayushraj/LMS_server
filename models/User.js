@@ -8,7 +8,14 @@ var UserSchema = new Schema({
     type: String,
     required: true
   },
-  password: String
+  password: {
+    type: String,
+    required: true
+  },
+  resetLink: {
+    data: String,
+    default: ""
+  }
 })
 
 // UserSchema.plugin(passportLocalMongoose)
