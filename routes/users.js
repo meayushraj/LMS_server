@@ -1,119 +1,125 @@
-const express = require("express")
-const User = require("../models/User")
-const passport = require("passport")
-const router = express.Router()
-const bodyParser = require("body-parser")
-const queryString = require("query-string")
-var url = require("url")
-const querystring = require("querystring")
-var validator = require("validator")
-const _ = require("lodash")
-const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
-const keys = process.env.JWT_SECRET
-const sgmail = require("@sendgrid/mail")
+const express = require("express");
+const User = require("../models/User");
+const passport = require("passport");
+const router = express.Router();
+const bodyParser = require("body-parser");
+const queryString = require("query-string");
+var url = require("url");
+const querystring = require("querystring");
+var validator = require("validator");
+const _ = require("lodash");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const keys = process.env.JWT_SECRET;
+const sgmail = require("@sendgrid/mail");
 
-sgmail.setApiKey(process.env.SG_MAIL_API)
+sgmail.setApiKey(process.env.SG_MAIL_API);
 
 // const { forgotPassword, resetPassword } = require("../services/forgotPassword")
 //module
-const Course = require("../models/Course")
+const Course = require("../models/Course");
 
-router.use(bodyParser.urlencoded({ extended: false }))
-router.use(bodyParser.json())
+router.use(bodyParser.urlencoded({ extended: false }));
+router.use(bodyParser.json());
 router.get("/", (req, res) => {
-  res.send("vaishanv")
-})
+  res.send("vaishanv");
+});
 
 router.get("/register", (req, res) => {
-  res.send("register page")
-})
+  console.log(req.body);
+});
 
 router.get("/login", (req, res) => {
-  res.send("login")
-})
+  res.send("login");
+});
 
 router.post("/login", (req, res) => {
-  const email = req.body.email
-  const password = req.body.password
+  const email = req.body.email;
+  const password = req.body.password;
 
   User.findOne({ email }).then((user) => {
     if (!user) {
-      return res.status(404).json({ email: "user not found" })
+      return res.status(404).json({ email: "user not found" });
     }
     bcrypt.compare(password, user.password).then((isMatch) => {
       if (isMatch) {
         const payload = {
           id: user.id,
           username: user.username,
-          email: user.email
-        }
+          email: user.email,
+        };
 
         jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
           res.json({
             success: true,
-            token: "Bearer " + token
-          })
-        })
+            token: "Bearer " + token,
+          });
+        });
       } else {
-        return res.status(400).json({ password: "password incorrect" })
+        return res.status(400).json({ password: "password incorrect" });
       }
-    })
-  })
-})
+    });
+  });
+});
 
 router.post("/register", (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   User.findOne({ email: req.body.email }).then((user) => {
     if (user) {
-      return res.status(400).json({ email: "Email aldready exists" })
+      return res.status(400).json({ email: "Email aldready exists" });
     } else {
       const newUser = new User({
         username: req.body.username,
         email: req.body.email,
-        password: req.body.password
-      })
+        password: req.body.password,
+        age: req.body.formValues.Age,
+        sex: req.body.formValues.sex,
+        location: req.body.formValues.location,
+        language: req.body.formValues.language,
+        fieldOfIntrest: req.body.formValues.FieldOfInterest,
+        instructor: req.body.formValues.instructor,
+      });
 
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
           if (err) {
-            console.log(err)
+            console.log(err);
           }
-          newUser.password = hash
+          newUser.password = hash;
           newUser
             .save()
             .then((user) => res.json(user))
-            .catch((err) => console.log(err))
-        })
-      })
+            .catch((err) => console.log(err));
+        });
+      });
     }
-  })
-})
+  });
+});
 
 //get all courese
 router.get("/all-course", (req, res) => {
   Course.find({}, function (err, allCourse) {
     if (err) {
-      console.log(err)
+      console.log(err);
     } else {
-      res.json(allCourse)
+      res.json(allCourse);
     }
-  })
-})
+  });
+});
 
 //forgetPassword route
 router.put("/forgot-password", (req, res) => {
-  const email = req.body.email
-  console.log(111)
-  console.log(email)
-  console.log(222)
+  const email = req.body.email;
+  console.log(111);
+  console.log(email);
+  console.log(222);
 
   User.findOne({ email }, (err, user) => {
     if (err || !user) {
-      return res.status(400).json({ error: "User not found" })
+      return res.status(400).json({ error: "User not found" });
     }
 
-    const token = jwt.sign({ _id: user.id }, keys, { expiresIn: "10m" })
+    const token = jwt.sign({ _id: user.id }, keys, { expiresIn: "10m" });
     const data = {
       to: email,
       from: "jackfrostvaishanav@gmai.com",
@@ -121,63 +127,63 @@ router.put("/forgot-password", (req, res) => {
       html: `
             <h2>Please Click the below link to reset your account Password</h2>
             <a href=${process.env.CLIENT_URL}/user/reset-password/${token}>reset link<a>
-        `
-    }
+        `,
+    };
 
     return user.updateOne({ resetLink: token }, function (err, success) {
       if (err) {
-        return res.status(400).json({ error: "Reset password Link error" })
+        return res.status(400).json({ error: "Reset password Link error" });
       } else {
         sgmail.send(data).then(
           () => {},
           (error) => {
-            console.error(error)
+            console.error(error);
 
             if (error.response) {
-              console.error(error.response.body)
+              console.error(error.response.body);
             }
           }
-        )
+        );
       }
-    })
-  })
-})
+    });
+  });
+});
 
 router.put("/reset-password/:id", (req, res) => {
-  const data = req.body
-  const resetLink = req.params.id
+  const data = req.body;
+  const resetLink = req.params.id;
   if (resetLink) {
     jwt.verify(resetLink, keys, function (error, decodedData) {
       if (error) {
         return res.status(401).json({
-          error: "incorret token"
-        })
+          error: "incorret token",
+        });
       }
 
       User.findOne({ resetLink }, (err, user) => {
         if (err || !user) {
-          return res.status(400).json({ error: "User not found" })
+          return res.status(400).json({ error: "User not found" });
         }
 
         const newUser = {
           password: data.newPassword,
-          resetLink: ""
-        }
+          resetLink: "",
+        };
 
         bcrypt.genSalt(10, (err, salt) => {
           bcrypt.hash(newUser.password, salt, (err, hash) => {
             if (err) {
-              console.log(err)
+              console.log(err);
             }
-            newUser.password = hash
-            user = _.extend(user, newUser)
+            newUser.password = hash;
+            user = _.extend(user, newUser);
             user
               .save()
               .then((user) => res.json(user))
-              .catch((err) => console.log(err))
-            console.log(newUser.password)
-          })
-        })
+              .catch((err) => console.log(err));
+            console.log(newUser.password);
+          });
+        });
 
         // user.save((err, result) => {
         //   if (err) {
@@ -185,20 +191,20 @@ router.put("/reset-password/:id", (req, res) => {
         //   } else {
         //   }
         // })
-      })
-    })
+      });
+    });
   } else {
-    return res.status(400).json({ error: "Authentication error" })
+    return res.status(400).json({ error: "Authentication error" });
   }
-})
+});
 
 //current user
 router.get(
   "/current",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    res.send(req.user)
+    res.send(req.user);
   }
-)
+);
 
-module.exports = router
+module.exports = router;
