@@ -17,10 +17,11 @@ router.post('/add-course', (req, res) => {
   const description = req.body.Discription
   const learning = req.body.learning
   const targetStudent = req.body.TargetStudents
-  const price = req.body.Price
+  const price = req.body.feeStructure
   const sections = req.body.sections
-  console.log(sections)
-  const imageUrl = req.body.Image
+  // console.log(sections)
+  const imageUrl = req.body.image
+  const videoUrl = req.body.video
   const user = {
     id: req.body.currentUser.currentUserId,
     username: req.body.currentUser.currentUsername,
@@ -35,6 +36,7 @@ router.post('/add-course', (req, res) => {
     learning: learning,
     feeStructure: price,
     imageUrl: imageUrl,
+    videoUrl: videoUrl,
   }
 
   Course.create(newCourse, function (err, newlyCreated) {

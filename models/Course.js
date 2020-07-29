@@ -31,6 +31,10 @@ var CourseSchema = new Schema({
     type: String,
     default: '',
   },
+  videoUrl: {
+    type: String,
+    default: '',
+  },
   sections: [
     {
       taskList: [
