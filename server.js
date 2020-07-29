@@ -1,21 +1,21 @@
-const express = require("express")
-const mongoose = require("mongoose")
-const bodyParser = require("body-parser")
-const passport = require("passport")
+const express = require('express')
+const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
+const passport = require('passport')
 // const LocalStrategy = require("passport-local")
 
 //database models
-const User = require("./models/User")
+const User = require('./models/User')
 
 const app = express()
-require("dotenv").config()
+require('dotenv').config()
 
 //route config
-const user = require("./routes/users")
-const image = require("./routes/imageUpload")
-const instructor = require("./routes/instructor")
+const user = require('./routes/users')
+const image = require('./routes/fileUpload')
+const instructor = require('./routes/instructor')
 
-const { MongoStore } = require("connect-mongo")
+const { MongoStore } = require('connect-mongo')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
@@ -32,9 +32,9 @@ mongoose
   .connect(db, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true
+    useCreateIndex: true,
   })
-  .then(() => console.log("MongoDB connected"))
+  .then(() => console.log('MongoDB connected'))
   .catch((err) => console.log(err))
 
 //passport configaration
@@ -50,20 +50,20 @@ mongoose
 //   })
 // )
 app.use(passport.initialize())
-require("./config/passport")(passport)
+require('./config/passport')(passport)
 // app.use(passport.session())
 // passport.use(new LocalStrategy(User.authenticate()))
 // passport.serializeUser(User.serializeUser())
 // passport.deserializeUser(User.deserializeUser())
 
-app.get("/", (req, res) => {
-  res.send("test route")
+app.get('/', (req, res) => {
+  res.send('test route')
 })
 
 //routes
-app.use("/user", user)
-app.use("/image", image)
-app.use("/instructor", instructor)
+app.use('/user', user)
+app.use('/image', image)
+app.use('/instructor', instructor)
 
 const port = process.env.PORT || 5000
 

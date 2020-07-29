@@ -14,6 +14,7 @@ router.get('/test', (req, res) => {
 })
 
 router.post('/upload', upload.uploadImageToS3)
+router.post('/file-upload', upload.uploadImageToS3)
 
 // router.post("/upload", upload.single("image"), function (req, res, next) {
 //   // console.log(req.body.name)
