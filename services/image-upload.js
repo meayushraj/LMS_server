@@ -33,11 +33,11 @@ const singleFileUpload = upload.single('image')
 
 function uploadToS3(req, res) {
   req.s3key = uuidv4()
-  let downloadVideoUrl = `https://lms-test-vaishnav.s3.${process.env.REGION}.amazonaws.com/${req.s3key}`
+  let downloadImageUrl = `https://lms-test-vaishnav.s3.${process.env.REGION}.amazonaws.com/${req.s3key}`
   return new Promise((resolve, reject) => {
     return singleFileUpload(req, res, (err) => {
       if (err) return reject(err)
-      return resolve(downloadVideoUrl)
+      return resolve(downloadImageUrl)
     })
   })
 }
@@ -46,10 +46,9 @@ function uploadToS3(req, res) {
 module.exports = {
   uploadImageToS3: (req, res) => {
     uploadToS3(req, res)
-      .then((downloadVideoUrl) => {
-        s = downloadVideoUrl
-        console.log(downloadVideoUrl)
-        return res.status(200).send({ downloadVideoUrl })
+      .then((downloadImageUrl) => {
+        console.log(downloadImageUrl)
+        return res.status(200).send({ downloadImageUrl })
       })
       .catch((e) => {
         console.log(e)
