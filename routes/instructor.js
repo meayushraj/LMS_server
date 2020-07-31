@@ -53,7 +53,7 @@ router.post('/add-course', (req, res) => {
   const newCourse = {
     title: title,
     description: description,
-    targetStudent: targetStudent,
+    targetStudent: targetStudents,
     userId: userId,
     username: username,
     sections: sections,
