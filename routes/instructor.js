@@ -34,12 +34,15 @@ router.get('/all-course/:id', (req, res) => {
 })
 
 router.post('/add-course', (req, res) => {
-  console.log(req.body)
+  // console.log(req.body)
   const title = req.body.Title
   const description = req.body.Discription
   const learning = req.body.learning
   const targetStudent = req.body.TargetStudents
-  const price = req.body.feeStructure
+  const prerequisites = req.body.prerequisites
+  const feeStructure = req.body.feeStructure
+  const price = req.body.Price
+  // console.log(price)
   const sections = req.body.sections
   // console.log(sections)
   const imageUrl = req.body.image
@@ -55,9 +58,11 @@ router.post('/add-course', (req, res) => {
     username: username,
     sections: sections,
     learning: learning,
-    feeStructure: price,
+    feeStructure: feeStructure,
+    price: price,
     imageUrl: imageUrl,
     videoUrl: videoUrl,
+    prerequisites: prerequisites,
   }
 
   Course.create(newCourse, function (err, newlyCreated) {

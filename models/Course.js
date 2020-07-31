@@ -18,12 +18,19 @@ var CourseSchema = new Schema({
   learning: {
     type: String,
   },
+  prerequisites: {
+    type: String,
+  },
   targetStudent: {
     type: String,
   },
   feeStructure: {
     type: String,
     default: 'Free',
+  },
+  price: {
+    type: String,
+    default: null,
   },
   imageUrl: {
     type: String,
@@ -39,6 +46,7 @@ var CourseSchema = new Schema({
         {
           VideoName: String,
           VideoNumber: String,
+          VideoURL: String,
         },
       ],
       SectionTitle: {
