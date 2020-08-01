@@ -39,7 +39,11 @@ var UserSchema = new Schema({
     data: String,
     default: '',
   },
-  purchasedCourse: [],
+  purchasedCourse: [
+    {
+      courseId: String,
+    },
+  ],
 })
 
 // UserSchema.plugin(passportLocalMongoose)

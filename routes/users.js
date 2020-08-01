@@ -213,7 +213,7 @@ router.post('/course/buy', (req, res) => {
 
   const newPurchase = {
     userId: userId,
-    username: username,
+    userName: username,
     userEmail: userEmail,
     instructorId: instructorId,
     instructorName: instructorName,
@@ -221,9 +221,6 @@ router.post('/course/buy', (req, res) => {
     courseTitle: courseTitle,
     courseCost: courseCost,
   }
-
-  const userId1 = newPurchase.userId
-  const courseId1 = newPurchase.courseId
 
   try {
     Purchase.create(newPurchase, function (err, newlyCreated) {
@@ -236,16 +233,19 @@ router.post('/course/buy', (req, res) => {
   } catch (e) {
     console.log(e)
   }
-
-  console.log('entered the try block')
-  User.findOneAndUpdate(
-    { _id: userId1 },
-    { $push: { purchasedCourse: courseId1 } }
-  )
 })
 
 //get purchased course
-router.get('/my-course', (req, res) => {})
+router.get('/my-course', (req, res) => {
+  const userId = req.body.userId
+  Purchase.find({ userId: userId }, function (err, allPurchased) {
+    if (err) {
+      console.log(err)
+    } else {
+      res.json(allPurchased)
+    }
+  })
+})
 
 //current user
 router.get(
