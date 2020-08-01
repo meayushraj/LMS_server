@@ -34,11 +34,11 @@ router.get('/all-course/:id', (req, res) => {
 })
 
 router.post('/add-course', (req, res) => {
-  // console.log(req.body)
+  console.log(req.body)
   const title = req.body.Title
   const description = req.body.Discription
   const learning = req.body.learning
-  const targetStudent = req.body.TargetStudents
+  const targetStudent = req.body.targetStudents
   const prerequisites = req.body.prerequisites
   const feeStructure = req.body.feeStructure
   const price = req.body.Price
@@ -53,7 +53,7 @@ router.post('/add-course', (req, res) => {
   const newCourse = {
     title: title,
     description: description,
-    targetStudent: targetStudents,
+    targetStudent: targetStudent,
     userId: userId,
     username: username,
     sections: sections,

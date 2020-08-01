@@ -2,6 +2,10 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 var CourseSchema = new Schema({
+  approved: {
+    type: Boolean,
+    default: false,
+  },
   userId: {
     type: String,
   },
