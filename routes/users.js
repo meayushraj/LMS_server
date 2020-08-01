@@ -18,6 +18,7 @@ sgmail.setApiKey(process.env.SG_MAIL_API)
 // const { forgotPassword, resetPassword } = require("../services/forgotPassword")
 //module
 const Course = require('../models/Course')
+const Purchase = require('../models/Purchase')
 
 router.use(bodyParser.urlencoded({ extended: false }))
 router.use(bodyParser.json())
@@ -197,6 +198,54 @@ router.put('/reset-password/:id', (req, res) => {
     return res.status(400).json({ error: 'Authentication error' })
   }
 })
+
+//purchase course //
+router.post('/course/buy', (req, res) => {
+  console.log(req.body)
+  const userId = req.body.studentdetails.id
+  const username = req.body.studentdetails.username
+  const userEmail = req.body.studentdetails.email
+  const instructorId = req.body.instructordetails.instructorid
+  const instructorName = req.body.instructordetails.instrucctorname
+  const courseId = req.body.coursedetails.courseid
+  const courseTitle = req.body.coursedetails.courseTitle
+  const courseCost = req.body.cost_in_dollar
+
+  const newPurchase = {
+    userId: userId,
+    username: username,
+    userEmail: userEmail,
+    instructorId: instructorId,
+    instructorName: instructorName,
+    courseId: courseId,
+    courseTitle: courseTitle,
+    courseCost: courseCost,
+  }
+
+  const userId1 = newPurchase.userId
+  const courseId1 = newPurchase.courseId
+
+  try {
+    Purchase.create(newPurchase, function (err, newlyCreated) {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log('purchase completed')
+      }
+    })
+  } catch (e) {
+    console.log(e)
+  }
+
+  console.log('entered the try block')
+  User.findOneAndUpdate(
+    { _id: userId1 },
+    { $push: { purchasedCourse: courseId1 } }
+  )
+})
+
+//get purchased course
+router.get('/my-course', (req, res) => {})
 
 //current user
 router.get(

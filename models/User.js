@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 // const passportLocalMongoose = require("passport-local-mongoose")
 
 var UserSchema = new Schema({
@@ -33,14 +33,15 @@ var UserSchema = new Schema({
   },
   instructor: {
     type: String,
-    default: "",
+    default: '',
   },
   resetLink: {
     data: String,
-    default: "",
+    default: '',
   },
-});
+  purchasedCourse: [],
+})
 
 // UserSchema.plugin(passportLocalMongoose)
 
-module.exports = User = mongoose.model("User", UserSchema);
+module.exports = User = mongoose.model('User', UserSchema)
