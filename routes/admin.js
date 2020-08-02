@@ -7,12 +7,42 @@ const bodyParser = require('body-parser')
 
 const Admin = require('../models/Admin')
 const Course = require('../models/Course')
+const Categories = require('../models/Categories')
 
 router.use(bodyParser.urlencoded({ extended: false }))
 router.use(bodyParser.json())
 
 router.get('/test', (req, res) => {
   res.send('admin test')
+})
+
+router.post('/add-categories', (req, res) => {
+  const CategoriesTitle = req.body.Categories
+  const CategoriesImage = req.body.CategoriesImage
+
+  const newCategorie = {
+    Categories: CategoriesTitle,
+    CategoriesImage: CategoriesImage,
+  }
+
+  // console.log(newCategorie)
+  Categories.create(newCategorie, function (err, newCat) {
+    if (err) {
+      console.log(err)
+    } else {
+      console.log('categorie added')
+    }
+  })
+})
+
+router.get('/get-categories', (req, res) => {
+  Categories.find({}, function (err, allCategories) {
+    if (err) {
+      console.log(err)
+    } else {
+      res.json(allCategories)
+    }
+  })
 })
 
 router.post('/register', (req, res) => {
