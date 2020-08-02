@@ -23,6 +23,9 @@ var PurchaseSchema = new Schema({
   courseTitle: {
     type: String,
   },
+  courseImageUrl: {
+    type: String,
+  },
   courseCost: {
     type: String,
   },

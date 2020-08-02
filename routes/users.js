@@ -210,6 +210,7 @@ router.post('/course/buy', (req, res) => {
   const courseId = req.body.coursedetails.courseid
   const courseTitle = req.body.coursedetails.courseTitle
   const courseCost = req.body.cost_in_dollar
+  const courseImageUrl = req.body.coursedetails.coverimgUrl
 
   const newPurchase = {
     userId: userId,
@@ -220,6 +221,7 @@ router.post('/course/buy', (req, res) => {
     courseId: courseId,
     courseTitle: courseTitle,
     courseCost: courseCost,
+    courseImageUrl: courseImageUrl,
   }
 
   try {
@@ -236,8 +238,8 @@ router.post('/course/buy', (req, res) => {
 })
 
 //get purchased course
-router.get('/my-course', (req, res) => {
-  const userId = req.body.userId
+router.get('/my-course/:id', (req, res) => {
+  const userId = req.params.id
   Purchase.find({ userId: userId }, function (err, allPurchased) {
     if (err) {
       console.log(err)
