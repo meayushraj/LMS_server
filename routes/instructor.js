@@ -11,9 +11,9 @@ router.get('/test', (req, res) => {
   res.send('instructor test')
 })
 
-router.get('/all-course', (req, res) => {
+router.get('/manage-course/:id', (req, res) => {
   // const userId = req.body.userId
-  Course.find({ userId: req.body.id }, function (err, allCourse) {
+  Course.find({ userId: req.params.id }, function (err, allCourse) {
     if (err) {
       console.log(err)
     } else {
@@ -35,10 +35,10 @@ router.get('/all-course/:id', (req, res) => {
 
 router.post('/add-course', (req, res) => {
   console.log(req.body)
-  const title = req.body.Title
-  const description = req.body.Discription
+  const title = req.body.title //changed
+  const description = req.body.description //changed
   const learning = req.body.learning
-  const targetStudent = req.body.targetStudents
+  const targetStudent = req.body.targetStudent
   const prerequisites = req.body.prerequisites
   const feeStructure = req.body.feeStructure
   const price = req.body.Price
