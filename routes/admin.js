@@ -8,6 +8,7 @@ const bodyParser = require('body-parser')
 const Admin = require('../models/Admin')
 const Course = require('../models/Course')
 const Categories = require('../models/Categories')
+const AdminCourse = require('../models/AdminCourse')
 
 router.use(bodyParser.urlencoded({ extended: false }))
 router.use(bodyParser.json())
@@ -104,7 +105,7 @@ router.post('/login', (req, res) => {
 
 //approve the course
 router.get('/all-course/permission', (req, res) => {
-  Course.find({}, function (err, allCourse) {
+  Course.find({ approved: false }, function (err, allCourse) {
     if (err) {
       console.log(err)
     } else {
@@ -122,6 +123,82 @@ router.put('/all-course/:id/permission', (req, res) => {
       res.send(err)
     } else {
       res.send('updated !')
+    }
+  })
+})
+
+//add admin course
+router.post('/add-course', (req, res) => {
+  // console.log(req.body)
+  const title = req.body.Title
+  const description = req.body.Discription
+  const learning = req.body.learning
+  const targetStudent = req.body.targetStudents
+  const prerequisites = req.body.prerequisites
+  const feeStructure = req.body.feeStructure
+  const price = req.body.Price
+  // console.log(price)
+  // const sections = req.body.sections
+  // console.log(sections)
+  const imageUrl = req.body.image
+  const videoUrl = req.body.video
+  // const userId = req.body.currentUser.currentUserId
+  // const username = req.body.currentUser.currentUsername
+
+  const newCourse = {
+    title: title,
+    description: description,
+    targetStudent: targetStudent,
+    // userId: userId,
+    // username: username,
+    // sections: sections,
+    learning: learning,
+    feeStructure: feeStructure,
+    price: price,
+    imageUrl: imageUrl,
+    videoUrl: videoUrl,
+    prerequisites: prerequisites,
+  }
+
+  // console.log(newCourse)
+  AdminCourse.create(newCourse, function (err, newlyCreated) {
+    if (err) {
+      console.log(err)
+    } else {
+      console.log('admin added course')
+    }
+  })
+
+  Course.create(newCourse, function (err, newlyCreated) {
+    if (err) {
+      console.log(err)
+    } else {
+      console.log('added course')
+    }
+  })
+})
+
+//update admin course
+router.put('/all-course/:id', (req, res) => {
+  AdminCourse.findByIdAndUpdate(req.params.id, req.body, function (
+    err,
+    updatedCourse
+  ) {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send('updated !')
+    }
+  })
+})
+
+//delete course
+router.delete('/all-course/:id', (req, res) => {
+  AdminCourse.findByIdAndRemove(req.params.id, function (err) {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send('deleted course')
     }
   })
 })
