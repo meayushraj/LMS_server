@@ -39,11 +39,13 @@ var UserSchema = new Schema({
     data: String,
     default: '',
   },
-  purchasedCourse: [
-    {
-      courseId: String,
-    },
-  ],
+
+  // purchaseId: {
+  //   id: {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     ref: 'Purchase',
+  //   },
+  // },
 })
 
 // UserSchema.plugin(passportLocalMongoose)

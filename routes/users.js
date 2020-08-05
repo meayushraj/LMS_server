@@ -235,6 +235,12 @@ router.post('/course/buy', (req, res) => {
   } catch (e) {
     console.log(e)
   }
+
+  // const newUser = {
+  //   purchasedCourse: courseId,
+  // }
+
+  // User.update({ _id: userId }, { $push: { purchasedCourse: courseId } })
 })
 
 //get purchased course

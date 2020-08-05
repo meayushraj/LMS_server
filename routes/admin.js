@@ -6,6 +6,7 @@ const keys = process.env.JWT_SECRET
 const bodyParser = require('body-parser')
 
 const Admin = require('../models/Admin')
+const User = require('../models/User')
 const Course = require('../models/Course')
 const Categories = require('../models/Categories')
 const AdminCourse = require('../models/AdminCourse')
@@ -146,6 +147,7 @@ router.post('/add-course', (req, res) => {
   // const username = req.body.currentUser.currentUsername
 
   const newCourse = {
+    approved: true,
     title: title,
     description: description,
     targetStudent: targetStudent,
@@ -199,6 +201,17 @@ router.delete('/all-course/:id', (req, res) => {
       res.send(err)
     } else {
       res.send('deleted course')
+    }
+  })
+})
+
+//get all user
+router.get('/all-user', (req, res) => {
+  User.find({}, function (err, allUser) {
+    if (err) {
+      console.log(err)
+    } else {
+      res.json(allUser)
     }
   })
 })
