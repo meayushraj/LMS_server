@@ -6,6 +6,10 @@ var CourseSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  adminCourse: {
+    type: Boolean,
+    default: false,
+  },
   userId: {
     type: String,
   },

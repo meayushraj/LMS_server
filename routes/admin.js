@@ -9,7 +9,6 @@ const Admin = require('../models/Admin')
 const User = require('../models/User')
 const Course = require('../models/Course')
 const Categories = require('../models/Categories')
-const AdminCourse = require('../models/AdminCourse')
 
 router.use(bodyParser.urlencoded({ extended: false }))
 router.use(bodyParser.json())
@@ -138,15 +137,16 @@ router.post('/add-course', (req, res) => {
   const prerequisites = req.body.prerequisites
   const feeStructure = req.body.feeStructure
   const price = req.body.Price
-  // console.log(price)
-  // const sections = req.body.sections
-  // console.log(sections)
+  console.log(price)
+  const sections = req.body.sections
+  console.log(sections)
   const imageUrl = req.body.image
   const videoUrl = req.body.video
-  // const userId = req.body.currentUser.currentUserId
-  // const username = req.body.currentUser.currentUsername
+  const userId = req.body.currentUser.currentUserId
+  const username = req.body.currentUser.currentUsername
 
   const newCourse = {
+    adminCourse: true,
     approved: true,
     title: title,
     description: description,
@@ -163,13 +163,6 @@ router.post('/add-course', (req, res) => {
   }
 
   // console.log(newCourse)
-  AdminCourse.create(newCourse, function (err, newlyCreated) {
-    if (err) {
-      console.log(err)
-    } else {
-      console.log('admin added course')
-    }
-  })
 
   Course.create(newCourse, function (err, newlyCreated) {
     if (err) {
@@ -182,7 +175,7 @@ router.post('/add-course', (req, res) => {
 
 //update admin course
 router.put('/all-course/:id', (req, res) => {
-  AdminCourse.findByIdAndUpdate(req.params.id, req.body, function (
+  Course.findByIdAndUpdate(req.params.id, req.body, function (
     err,
     updatedCourse
   ) {
@@ -196,7 +189,7 @@ router.put('/all-course/:id', (req, res) => {
 
 //delete course
 router.delete('/all-course/:id', (req, res) => {
-  AdminCourse.findByIdAndRemove(req.params.id, function (err) {
+  Course.findByIdAndRemove(req.params.id, function (err) {
     if (err) {
       res.send(err)
     } else {
