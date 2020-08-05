@@ -130,10 +130,10 @@ router.put('/all-course/:id/permission', (req, res) => {
 //add admin course
 router.post('/add-course', (req, res) => {
   // console.log(req.body)
-  const title = req.body.Title
-  const description = req.body.Discription
+  const title = req.body.title
+  const description = req.body.description
   const learning = req.body.learning
-  const targetStudent = req.body.targetStudents
+  const targetStudent = req.body.targetStudent
   const prerequisites = req.body.prerequisites
   const feeStructure = req.body.feeStructure
   const price = req.body.Price
@@ -151,9 +151,9 @@ router.post('/add-course', (req, res) => {
     title: title,
     description: description,
     targetStudent: targetStudent,
-    // userId: userId,
-    // username: username,
-    // sections: sections,
+    userId: userId,
+    username: username,
+    sections: sections,
     learning: learning,
     feeStructure: feeStructure,
     price: price,
@@ -198,13 +198,24 @@ router.delete('/all-course/:id', (req, res) => {
   })
 })
 
+//get admins all course
+router.get('/all-course', (req, res) => {
+  Course.find({ adminCourse }, function (err) {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send('deleted course')
+    }
+  })
+})
+
 //get all user
 router.get('/all-user', (req, res) => {
-  User.find({}, function (err, allUser) {
+  User.find({ adminCourse: true }, function (err, allCourse) {
     if (err) {
       console.log(err)
     } else {
-      res.json(allUser)
+      res.json(allCourse)
     }
   })
 })
