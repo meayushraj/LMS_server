@@ -214,11 +214,11 @@ router.get('/all-course', (req, res) => {
 
 //get all user
 router.get('/all-user', (req, res) => {
-  User.find({ adminCourse: true }, function (err, allCourse) {
+  User.find({ adminCourse: true }, function (err, allUsers) {
     if (err) {
       console.log(err)
     } else {
-      res.json(allCourse)
+      res.json(allUsers)
     }
   })
 })
