@@ -223,4 +223,15 @@ router.get('/all-user', (req, res) => {
   })
 })
 
+//get perticular user
+router.get('/get-user/:id', (req, res) => {
+  User.findById(req.params.id, function (err, user) {
+    if (err) {
+      console.log(err)
+    } else {
+      res.json(user)
+    }
+  })
+})
+
 module.exports = router

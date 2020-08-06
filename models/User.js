@@ -43,12 +43,13 @@ var UserSchema = new Schema({
     type: String,
   },
 
-  // purchaseId: {
-  //   id: {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: 'Purchase',
-  //   },
-  // },
+  purchaseId: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Purchase',
+    },
+    // productId:{ type: Schema.Types.ObjectId , ref: 'addproduct' }
+  ],
 })
 
 // UserSchema.plugin(passportLocalMongoose)

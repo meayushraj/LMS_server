@@ -233,6 +233,9 @@ router.post('/course/buy', (req, res) => {
       if (err) {
         console.log(err)
       } else {
+        User.findByIdAndUpdate(userId, {
+          $push: { purchaseId: newlyCreated.id },
+        })
         console.log('purchase completed')
       }
     })
