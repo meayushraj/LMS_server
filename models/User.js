@@ -32,8 +32,8 @@ var UserSchema = new Schema({
     type: String,
   },
   instructor: {
-    type: String,
-    default: '',
+    type: Boolean,
+    default: false,
   },
   resetLink: {
     data: String,

@@ -78,7 +78,6 @@ router.post('/register', (req, res) => {
         location: req.body.formValues.location,
         language: req.body.formValues.language,
         fieldOfIntrest: req.body.formValues.FieldOfInterest,
-        instructor: req.body.formValues.instructor,
       })
 
       bcrypt.genSalt(10, (err, salt) => {

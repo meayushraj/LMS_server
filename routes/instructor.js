@@ -3,12 +3,27 @@ const router = express.Router()
 const bodyParser = require('body-parser')
 
 const Course = require('../models/Course')
+const User = require('../models/User')
 
 router.use(bodyParser.urlencoded({ extended: false }))
 router.use(bodyParser.json())
 
 router.get('/test', (req, res) => {
   res.send('instructor test')
+})
+
+//make user as instructor
+router.put('/getting-started/:id', (req, res) => {
+  User.findByIdAndUpdate(req.params.id, req.body, function (
+    err,
+    updatedCourse
+  ) {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send('updated to instructor')
+    }
+  })
 })
 
 router.get('/manage-course/:id', (req, res) => {
