@@ -176,7 +176,7 @@ router.post('/add-course', (req, res) => {
   })
 })
 
-//update admin course
+//update admin added course
 router.put('/all-course/:id', (req, res) => {
   Course.findByIdAndUpdate(req.params.id, req.body, function (
     err,
