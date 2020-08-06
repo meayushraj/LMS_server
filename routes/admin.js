@@ -105,7 +105,7 @@ router.post('/login', (req, res) => {
 
 //approve the course
 router.get('/all-course/permission', (req, res) => {
-  Course.find({ approved: false }, function (err, allCourse) {
+  Course.find({ permission: 'Pending' }, function (err, allCourse) {
     if (err) {
       console.log(err)
     } else {
@@ -149,7 +149,7 @@ router.post('/add-course', (req, res) => {
 
   const newCourse = {
     adminCourse: true,
-    approved: true,
+    permission: 'accept',
     title: title,
     description: description,
     targetStudent: targetStudent,
