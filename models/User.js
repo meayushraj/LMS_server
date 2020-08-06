@@ -39,6 +39,9 @@ var UserSchema = new Schema({
     data: String,
     default: '',
   },
+  date: {
+    type: String,
+  },
 
   // purchaseId: {
   //   id: {

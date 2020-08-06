@@ -69,6 +69,7 @@ router.post('/register', (req, res) => {
     if (user) {
       return res.status(400).json({ email: 'Email aldready exists' })
     } else {
+      const date = new Date().toISOString().split('T')[0]
       const newUser = new User({
         username: req.body.username,
         email: req.body.email,
@@ -78,6 +79,7 @@ router.post('/register', (req, res) => {
         location: req.body.formValues.location,
         language: req.body.formValues.language,
         fieldOfIntrest: req.body.formValues.FieldOfInterest,
+        date: date,
       })
 
       bcrypt.genSalt(10, (err, salt) => {
