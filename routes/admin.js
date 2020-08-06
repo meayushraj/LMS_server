@@ -203,7 +203,7 @@ router.delete('/all-course/:id', (req, res) => {
 
 //get admins all course
 router.get('/all-course', (req, res) => {
-  Course.find({ adminCourse }, function (err) {
+  Course.find({ adminCourse: true }, function (err) {
     if (err) {
       res.send(err)
     } else {
@@ -214,7 +214,7 @@ router.get('/all-course', (req, res) => {
 
 //get all user
 router.get('/all-user', (req, res) => {
-  User.find({ adminCourse: true }, function (err, allUsers) {
+  User.find({}, function (err, allUsers) {
     if (err) {
       console.log(err)
     } else {
