@@ -212,6 +212,8 @@ router.post('/course/buy', (req, res) => {
   const courseCost = req.body.cost_in_dollar
   const courseImageUrl = req.body.coursedetails.coverimgUrl
 
+  const date = new Date().toISOString().split('T')[0]
+
   const newPurchase = {
     userId: userId,
     userName: username,
@@ -222,6 +224,7 @@ router.post('/course/buy', (req, res) => {
     courseTitle: courseTitle,
     courseCost: courseCost,
     courseImageUrl: courseImageUrl,
+    date: date,
   }
 
   try {

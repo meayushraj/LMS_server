@@ -145,6 +145,8 @@ router.post('/add-course', (req, res) => {
   const userId = req.body.currentUser.currentUserId
   const username = req.body.currentUser.currentUsername
 
+  const date = new Date().toISOString().split('T')[0]
+
   const newCourse = {
     adminCourse: true,
     approved: true,
@@ -160,6 +162,7 @@ router.post('/add-course', (req, res) => {
     imageUrl: imageUrl,
     videoUrl: videoUrl,
     prerequisites: prerequisites,
+    date: date,
   }
 
   // console.log(newCourse)

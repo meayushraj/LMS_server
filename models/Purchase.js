@@ -29,6 +29,9 @@ var PurchaseSchema = new Schema({
   courseCost: {
     type: String,
   },
+  date: {
+    type: String,
+  },
 })
 
 module.exports = Purchase = mongoose.model('Purchase', PurchaseSchema)

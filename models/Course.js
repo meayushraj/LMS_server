@@ -65,6 +65,9 @@ var CourseSchema = new Schema({
       },
     },
   ],
+  date: {
+    type: String,
+  },
 })
 
 module.exports = Course = mongoose.model('Course', CourseSchema)
