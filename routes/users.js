@@ -98,7 +98,7 @@ router.post('/register', (req, res) => {
 
 //get all courese
 router.get('/all-course', (req, res) => {
-  Course.find({ approved: true }, function (err, allCourse) {
+  Course.find({ premission: 'accept' }, function (err, allCourse) {
     if (err) {
       console.log(err)
     } else {
