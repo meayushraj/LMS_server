@@ -203,11 +203,11 @@ router.delete('/all-course/:id', (req, res) => {
 
 //get admins all course
 router.get('/all-course', (req, res) => {
-  Course.find({ adminCourse: true }, function (err) {
+  Course.find({ adminCourse: true }, function (err, allCourse) {
     if (err) {
       res.send(err)
     } else {
-      res.send('deleted course')
+      res.json(allCourse)
     }
   })
 })
