@@ -234,4 +234,29 @@ router.get('/get-user/:id', (req, res) => {
   })
 })
 
+//get all instructor
+router.get('/get-instructor', (req, res) => {
+  User.find({ instructor: true }, function (err, allInstructor) {
+    if (err) {
+      console.log(err)
+    } else {
+      res.json(allInstructor)
+    }
+  })
+})
+
+//get instructor by id
+router.get('/get-instructor/:id', (req, res) => {
+  User.find({ $and: [{ instructor: true }, { _id: req.params.id }] }, function (
+    err,
+    instructor
+  ) {
+    if (err) {
+      res.json('no instrutor found')
+    } else {
+      res.json(instructor)
+    }
+  })
+})
+
 module.exports = router
